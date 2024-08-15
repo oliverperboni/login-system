@@ -18,17 +18,20 @@ public class User implements UserDetails{
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    // @Column(name = "first_name")
+    // private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    // @Column(name = "last_name")
+    // private String lastName;
 
     @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
+    private String email;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
@@ -40,24 +43,27 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "user")
     private List<RecoverToken> tokenRecover;
 
-    public User(String firstName, String lastName, String username, String password, Role role, List<Token> tokens) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+   
+
+    public User(String username, String password, String email, Role role, List<Token> tokens,
+            List<RecoverToken> tokenRecover) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.role = role;
         this.tokens = tokens;
+        this.tokenRecover = tokenRecover;
     }
 
-    public User(Integer id, String firstName, String lastName, String username, String password, Role role,
-            List<Token> tokens) {
+    public User(Integer id, String username, String password, String email, Role role, List<Token> tokens,
+            List<RecoverToken> tokenRecover) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.role = role;
         this.tokens = tokens;
+        this.tokenRecover = tokenRecover;
     }
 
     public User() {
@@ -71,21 +77,7 @@ public class User implements UserDetails{
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getUsername() {
         return username;
@@ -142,5 +134,16 @@ public class User implements UserDetails{
 
     public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<RecoverToken> getTokenRecover() {
+        return tokenRecover;
     }
 }

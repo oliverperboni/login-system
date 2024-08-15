@@ -24,6 +24,10 @@ public class RecoverTokenService {
         return repo.findByToken(token);
     }
 
+    public void invalidateToken(RecoverToken recoverToken) {
+        repo.delete(recoverToken);
+    }
+
     
     
 }

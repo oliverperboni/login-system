@@ -1,6 +1,6 @@
 package com.example.login_system.Models;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +21,7 @@ public class RecoverToken {
  
     private String token;
 
-    private LocalTime expires_at;
+    private LocalDateTime expires_at;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,14 +30,14 @@ public class RecoverToken {
     public RecoverToken() {
     }
 
-    public RecoverToken(Integer id, User user, String token, LocalTime expires_at) {
+    public RecoverToken(Integer id, User user, String token, LocalDateTime expires_at) {
         this.id = id;
         this.user = user;
         this.token = token;
         this.expires_at = expires_at;
     }
 
-    public RecoverToken(User user, String token, LocalTime expires_at) {
+    public RecoverToken(User user, String token, LocalDateTime expires_at) {
         this.user = user;
         this.token = token;
         this.expires_at = expires_at;
@@ -67,11 +67,11 @@ public class RecoverToken {
         this.token = token;
     }
 
-    public LocalTime getExpires_at() {
+    public LocalDateTime getExpires_at() {
         return expires_at;
     }
 
-    public void setExpires_at(LocalTime expires_at) {
+    public void setExpires_at(LocalDateTime expires_at) {
         this.expires_at = expires_at;
     }
 

@@ -2,8 +2,10 @@ package com.example.login_system.Services;
 
 import org.springframework.security.core.authority.AuthorityUtils;
 import com.example.login_system.Models.AuthenticationResponse;
+import com.example.login_system.Models.RecoverToken;
 import com.example.login_system.Models.Token;
 import com.example.login_system.Models.User;
+import com.example.login_system.Repository.RecoverTokenRepository;
 import com.example.login_system.Repository.TokenRepository;
 import com.example.login_system.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +18,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -26,36 +30,33 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     private final TokenRepository tokenRepository;
+    private final RecoverTokenService recoverTokenService;
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(UserRepository repository,
-                                 PasswordEncoder passwordEncoder,
-                                 JwtService jwtService,
-                                 TokenRepository tokenRepository,
-                                 AuthenticationManager authenticationManager) {
+    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService,
+            TokenRepository tokenRepository, RecoverTokenService recoverTokenService,
+            AuthenticationManager authenticationManager) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.tokenRepository = tokenRepository;
+        this.recoverTokenService = recoverTokenService;
         this.authenticationManager = authenticationManager;
     }
-
-    
 
     public AuthenticationResponse register(User request) {
 
         // check if user already exist. if exist than authenticate the user
-        if(repository.findByUsername(request.getUsername()).isPresent()) {
-            return new AuthenticationResponse(null, null,"User already exist");
+        if (repository.findByUsername(request.getUsername()).isPresent()) {
+            return new AuthenticationResponse(null, null, "User already exist");
         }
 
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
+
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        user.setEmail(request.getEmail());
 
         user.setRole(request.getRole());
 
@@ -69,28 +70,23 @@ public class AuthenticationService {
 
         saveUserToken(accessToken, refreshToken, user);
 
-        return new AuthenticationResponse(accessToken, refreshToken,"User registration was successful");
+        return new AuthenticationResponse(accessToken, refreshToken, "User registration was successful");
 
     }
 
     private org.springframework.security.core.userdetails.User convertToSpringUser(User user) {
-        // TODO Auto-generated method stub
+
         return new org.springframework.security.core.userdetails.User(
-            user.getUsername(), 
-            user.getPassword(),
-            AuthorityUtils.createAuthorityList(user.getRole().name())
-        );
+                user.getUsername(),
+                user.getPassword(),
+                AuthorityUtils.createAuthorityList(user.getRole().name()));
     }
-
-
 
     public AuthenticationResponse authenticate(User request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
-                        request.getPassword()
-                )
-        );
+                        request.getPassword()));
 
         User user = repository.findByUsername(request.getUsername()).orElseThrow();
         org.springframework.security.core.userdetails.User springUser = convertToSpringUser(user);
@@ -103,19 +99,20 @@ public class AuthenticationService {
         return new AuthenticationResponse(accessToken, refreshToken, "User login was successful");
 
     }
-    
+
     private void revokeAllTokenByUser(User user) {
         List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getId());
-        if(validTokens.isEmpty()) {
+        if (validTokens.isEmpty()) {
             return;
         }
 
-        validTokens.forEach(t-> {
+        validTokens.forEach(t -> {
             t.setLoggedOut(true);
         });
 
         tokenRepository.saveAll(validTokens);
     }
+
     private void saveUserToken(String accessToken, String refreshToken, User user) {
         Token token = new Token();
         token.setAccessToken(accessToken);
@@ -131,7 +128,7 @@ public class AuthenticationService {
         // extract the token from authorization header
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
@@ -142,10 +139,10 @@ public class AuthenticationService {
 
         // check if the user exist in database
         User user = repository.findByUsername(username)
-                .orElseThrow(()->new RuntimeException("No user found"));
+                .orElseThrow(() -> new RuntimeException("No user found"));
 
         // check if the token is valid
-        if(jwtService.isValidRefreshToken(token, user)) {
+        if (jwtService.isValidRefreshToken(token, user)) {
             // generate access token
             org.springframework.security.core.userdetails.User springUser = convertToSpringUser(user);
             String accessToken = jwtService.generateAccessToken(springUser);
@@ -154,10 +151,57 @@ public class AuthenticationService {
             revokeAllTokenByUser(user);
             saveUserToken(accessToken, refreshToken, user);
 
-            return new ResponseEntity(new AuthenticationResponse(accessToken, refreshToken, "New token generated"), HttpStatus.OK);
+            return new ResponseEntity(new AuthenticationResponse(accessToken, refreshToken, "New token generated"),
+                    HttpStatus.OK);
         }
 
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
+    }
+
+    public ResponseEntity<String> updatePassword(String username, String oldPassword, String newPassword) {
+        // Verifica se o usuário existe no banco de dados
+        User user = repository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Verifica se a senha antiga está correta
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return new ResponseEntity<>("Senha antiga incorreta", HttpStatus.BAD_REQUEST);
+        }
+
+        // Codifica a nova senha e atualiza o campo de senha do usuário
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repository.save(user);
+
+        // Invalida todos os tokens existentes para este usuário
+        revokeAllTokenByUser(user);
+
+        // Gera novos tokens (opcional, dependendo do caso de uso)
+        org.springframework.security.core.userdetails.User springUser = convertToSpringUser(user);
+        String accessToken = jwtService.generateAccessToken(springUser);
+        String refreshToken = jwtService.generateRefreshToken(springUser);
+        saveUserToken(accessToken, refreshToken, user);
+
+        return new ResponseEntity<>("Senha atualizada com sucesso", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> resetPassword(String token, String newPassword) {
+        // Verifica se o token é válido
+        RecoverToken recoverToken = recoverTokenService.getToken(token);
+        System.out.println("--------------------------------------expirou ?????"+recoverToken);
+        if (recoverToken == null || !LocalDateTime.now().isBefore(recoverToken.getExpires_at())) {
+            return new ResponseEntity<>("Invalid or expired token", HttpStatus.UNAUTHORIZED);
+        }
+
+        // RecoverToken validToken = tokenOptional.get();
+        User user = recoverToken.getUser();
+
+        // Atualiza a senha do usuário
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repository.save(user);
+
+        // Revoga o token após a redefinição da senha
+
+        return new ResponseEntity<>("Password has been reset successfully", HttpStatus.OK);
     }
 }
