@@ -34,7 +34,7 @@ public class EmailSender {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Assunto do Email");
+            message.setSubject("Recuperar senha");
 
             String htmlContent = "<html>" +
                     "<body style='font-family: Arial, sans-serif; color: #333; background-color: #f7f7f7; margin: 0; padding: 20px;'>"
