@@ -159,15 +159,11 @@ public class AuthenticationService {
 
     }
 
-    public ResponseEntity<String> updatePassword(String username, String oldPassword, String newPassword) {
+    public ResponseEntity<String> updatePassword(String username, String newPassword) {
         // Verifica se o usuário existe no banco de dados
         User user = repository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // Verifica se a senha antiga está correta
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            return new ResponseEntity<>("Senha antiga incorreta", HttpStatus.BAD_REQUEST);
-        }
 
         // Codifica a nova senha e atualiza o campo de senha do usuário
         user.setPassword(passwordEncoder.encode(newPassword));

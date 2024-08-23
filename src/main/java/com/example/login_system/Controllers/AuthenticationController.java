@@ -2,6 +2,8 @@ package com.example.login_system.Controllers;
 
 // import com.example.ccpApi.Config.CustomLogoutHandler;
 import com.example.login_system.Services.AuthenticationService;
+import com.example.login_system.Utils.ChangePasswordRequest;
+import com.example.login_system.Utils.ResetPasswordRequest;
 import com.example.login_system.Models.AuthenticationResponse;
 import com.example.login_system.Models.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,6 +47,16 @@ public class AuthenticationController {
     ) {
         return authService.refreshToken(request, response);
     }
+
+    @PostMapping("/restore-password")
+    public ResponseEntity<String> resetPass(@RequestBody ChangePasswordRequest req){
+        String u = req.getUser();
+        String newPass = req.getNewPassword();
+
+        return authService.updatePassword(u, newPass);
+
+    }
+    
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
             HttpServletRequest request,

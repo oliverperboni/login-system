@@ -74,8 +74,6 @@ public class RecoverTokenController {
         String token = resetPasswordRequest.getToken();
         String newPassword = resetPasswordRequest.getNewPassword();
         String recoverToken = recoverTokenService.getToken(token).getToken();
-        System.out.println("-----------------------------------------NOVA SENHA: "+newPassword);
-        System.out.println("-----------------------------------------NOVO TOKEN: "+token);
 
         return authService.resetPassword(recoverToken, newPassword);
     }
