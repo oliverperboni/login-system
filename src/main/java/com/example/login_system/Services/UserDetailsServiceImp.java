@@ -24,7 +24,6 @@ public class UserDetailsServiceImp implements UserDetailsService {
     }
 
     public Optional<User> findUserByEmail(String email) {
-        System.out.println("-------------------------EMAIL NO SERVICO :: "+ email);
         return repository.findByEmail(email);
     }
 
