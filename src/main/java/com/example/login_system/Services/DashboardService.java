@@ -20,7 +20,7 @@ public class DashboardService {
     }
 
     public List<UserJSONResquest> searchByNamePrefix(String prefix) {
-        return UserJSONResquest.convert(repository.findByNameStartingWith(prefix));
+        return UserJSONResquest.convert(repository.findByUsernameStartingWith(prefix));
     }
     
 
