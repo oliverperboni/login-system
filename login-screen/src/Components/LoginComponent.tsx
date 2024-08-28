@@ -14,6 +14,7 @@ function LoginComponent() {
                 type="password"
                 name="user-password"
                 placeholder="Password"
+                minLength={6}
               />
             </div>
             <input type="submit" value="Sign in" />

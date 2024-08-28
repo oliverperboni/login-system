@@ -52,13 +52,21 @@ body {
   padding-left: 24px;
   font-weight: 700;
   width: 80%;
-  transition: 0.4s;
+  transition: 0.6s;
 }
 .user-form input[type="email"]:focus,
 .user-form input[type="password"]:focus {
   outline: none;
-  border-bottom: 2px solid #c9f7a4; /* Remove border */
+  border-bottom: 2px solid #c9f7a4;
 }
+
+.user-form input[type="email"]:user-invalid,
+.user-form input[type="password"]:user-invalid {
+  outline: none;
+  border-bottom: 2px solid #f7a4a4;
+}
+
+
 
 .user-form input[type="submit"] {
   background-color: #0f1316;
@@ -86,12 +94,10 @@ body {
   font-size: 15px;
 }
 
-.register{
+.register {
   margin: 8px;
 }
 .forgot:hover,
-.register:hover{
+.register:hover {
   color: rgb(179, 179, 179);
 }
-
-
