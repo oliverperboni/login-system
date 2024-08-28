@@ -1,0 +1,97 @@
+* {
+  font-family: "Quicksand", sans-serif;
+}
+body {
+  height: 100vh;
+  background: linear-gradient(
+    0deg,
+    rgba(113, 138, 159, 1) 0%,
+    rgba(39, 49, 57, 1) 100%
+  );
+}
+
+.title {
+  color: white;
+  text-align: center;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10vh;
+}
+
+.loginBox {
+  margin-top: 25vh;
+  background: #171d22;
+  position: relative;
+  height: 450px;
+  width: 360px;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-fields {
+  margin: 45px;
+  margin-top: 25px;
+}
+
+.user-form input[type="email"],
+.user-form input[type="password"] {
+  color: white;
+  border: none;
+  border-bottom: 2px solid #ffffff;
+  background: none;
+  padding: 10px;
+  padding-left: 24px;
+  font-weight: 700;
+  width: 80%;
+  transition: 0.4s;
+}
+.user-form input[type="email"]:focus,
+.user-form input[type="password"]:focus {
+  outline: none;
+  border-bottom: 2px solid #c9f7a4; /* Remove border */
+}
+
+.user-form input[type="submit"] {
+  background-color: #0f1316;
+  color: white;
+  cursor: pointer;
+  width: 200px;
+  font-weight: 700;
+  height: 50px;
+  border: none;
+  border-radius: 25px;
+  transition: background-color 0.5s ease;
+}
+
+.user-form input[type="submit"]:hover {
+  background-color: rgb(179, 179, 179);
+  color: #0f1316;
+}
+
+.others {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 15px;
+}
+
+.register{
+  margin: 8px;
+}
+.forgot:hover,
+.register:hover{
+  color: rgb(179, 179, 179);
+}
+
+
