@@ -1,33 +1,38 @@
 import React from "react";
-import "../Style/LoginComponent.css";
+import "../Style/RegisterComponent.css";
 import { Link } from "react-router-dom";
 
-function LoginComponent() {
+function RegisterComponent() {
   return (
     <>
       <div className="container">
         <div className="loginBox">
           <form className="user-form">
-            <h2 className="title">Login</h2>
+            <h2 className="title">Register</h2>
             <div className="input-fields">
               <input type="email" name="user-email" placeholder="Email" />
+              <input type="text" placeholder="Username" />
               <input
                 type="password"
-                name="user-password"
+                name="user-password1"
                 placeholder="Password"
                 minLength={6}
               />
+              <label ></label>
+              <input
+                type="password"
+                name="user-password2"
+                placeholder="Password again"
+                minLength={6}
+              />
             </div>
-            <input type="submit" value="Sign in" />
+            <input type="submit" value="Register" />
           </form>
-          <div className="others">
-            <Link  className="link" to={"/register"}><span className="register">register</span></Link>
-            <span className="forgot">forgot the password</span>
-          </div>
+    
         </div>
       </div>
     </>
   );
 }
 
-export default LoginComponent;
+export default RegisterComponent;

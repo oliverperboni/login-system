@@ -13,6 +13,8 @@ body {
 .title {
   color: white;
   text-align: center;
+  margin-top: 25px;
+  margin-bottom: 0px;
 }
 .container {
   display: flex;
@@ -38,12 +40,23 @@ body {
 }
 
 .input-fields {
-  margin: 45px;
-  margin-top: 25px;
+    display: flex;
+    flex-direction: column;
 }
+.input-fields input[type="email"],
+.input-fields input[name="user-password1"],
+.input-fields input[type="text"] {
+    margin-bottom: 10px; 
+  }
+
+  .input-fields input[name="user-password2"]{
+    margin-bottom: 0px; 
+  }
+  
 
 .user-form input[type="email"],
-.user-form input[type="password"] {
+.user-form input[type="password"],
+.user-form input[type="text"] {
   color: white;
   border: none;
   border-bottom: 2px solid #ffffff;
@@ -55,18 +68,18 @@ body {
   transition: 0.6s;
 }
 .user-form input[type="email"]:focus,
-.user-form input[type="password"]:focus {
+.user-form input[type="password"]:focus,
+.user-form input[type="text"]:focus  {
   outline: none;
   border-bottom: 2px solid #c9f7a4;
 }
 
 .user-form input[type="email"]:user-invalid,
-.user-form input[type="password"]:user-invalid {
+.user-form input[type="password"]:user-invalid,
+.user-form input[type="text"]:user-invalid {
   outline: none;
   border-bottom: 2px solid #f7a4a4;
 }
-
-
 
 .user-form input[type="submit"] {
   background-color: #0f1316;
@@ -85,31 +98,3 @@ body {
   color: #0f1316;
 }
 
-.others {
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-  font-size: 15px;
-}
-
-.register {
-  margin: 8px;
-}
-.forgot:hover,
-.register:hover {
-  color: rgb(179, 179, 179);
-}
-
-.link {
-  text-decoration: none;
-  color: white;
-}
-
-
-.link:hover {
-  text-decoration: none;
-  color: rgb(179, 179, 179);  
-
-}
