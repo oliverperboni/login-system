@@ -3,11 +3,7 @@
 }
 body {
   height: 100vh;
-  background: linear-gradient(
-    0deg,
-    rgba(113, 138, 159, 1) 0%,
-    rgba(39, 49, 57, 1) 100%
-  );
+  background: linear-gradient(135deg, #1f2a38 0%, #3c5061 100%);
 }
 
 .title {
@@ -23,7 +19,7 @@ body {
 
 .loginBox {
   margin-top: 25vh;
-  background: #171d22;
+  background:  #2c3e50;;
   position: relative;
   height: 450px;
   width: 360px;
