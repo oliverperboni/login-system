@@ -181,23 +181,24 @@ public class AuthenticationService {
         return new ResponseEntity<>("Senha atualizada com sucesso", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> resetPassword(String token, String newPassword) {
+
+    // TODO change this method: only confirms if the token is valid or not !!!
+    public ResponseEntity<String> resetPassword(String token) {
         // Verifica se o token é válido
         RecoverToken recoverToken = recoverTokenService.getToken(token);
-        System.out.println("--------------------------------------expirou ?????"+recoverToken);
         if (recoverToken == null || !LocalDateTime.now().isBefore(recoverToken.getExpires_at())) {
             return new ResponseEntity<>("Invalid or expired token", HttpStatus.UNAUTHORIZED);
         }
 
         // RecoverToken validToken = tokenOptional.get();
-        User user = recoverToken.getUser();
+        // User user = recoverToken.getUser();
 
-        // Atualiza a senha do usuário
-        user.setPassword(passwordEncoder.encode(newPassword));
-        repository.save(user);
+        // // Atualiza a senha do usuário
+        // user.setPassword(passwordEncoder.encode(newPassword));
+        // repository.save(user);
 
         // Revoga o token após a redefinição da senha
 
-        return new ResponseEntity<>("Password has been reset successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Token valid", HttpStatus.OK);
     }
 }

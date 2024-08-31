@@ -32,8 +32,6 @@ public class RecoverTokenController {
     private final UserDetailsServiceImp userService;
     private final AuthenticationService authService;
 
-
-
     public RecoverTokenController(RecoverTokenService recoverTokenService, UserDetailsServiceImp userService,
             AuthenticationService authService) {
         this.recoverTokenService = recoverTokenService;
@@ -67,15 +65,14 @@ public class RecoverTokenController {
 
     // find if exist one user with this email and then generate the token
 
-    // Post Recover token to change the password new pass and token
-    // (/reset-password)
-    @PostMapping("/reset-password")
-    public ResponseEntity<?>resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+    // Post Recover token to verify if the token is valid
+    // (/valid-token)
+    @PostMapping("/valid-token")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         String token = resetPasswordRequest.getToken();
-        String newPassword = resetPasswordRequest.getNewPassword();
         String recoverToken = recoverTokenService.getToken(token).getToken();
 
-        return authService.resetPassword(recoverToken, newPassword);
+        return authService.resetPassword(recoverToken);
     }
 
 }
