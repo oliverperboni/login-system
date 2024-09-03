@@ -29,7 +29,7 @@ function TestePage() {
   function loginUserData() {
     loginUser(
         "oliverperboni",
-        "456",
+        "password",
         "oliverperboni@gmail.com",
         "ADMIN"
       ).then((res) => {

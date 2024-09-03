@@ -37,20 +37,20 @@ public class EmailSender {
             message.setSubject("Recuperar senha");
 
             String htmlContent = "<html>" +
-                    "<body style='font-family: Arial, sans-serif; color: #333; background-color: #f7f7f7; margin: 0; padding: 20px;'>"
+                    "<body style='font-family: \"Quicksand\", sans-serif; color: white; background: linear-gradient(135deg, #1f2a38 0%, #3c5061 100%); margin: 0; padding: 40px;'>"
                     +
-                    "<div style='max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'>"
+                    "<div style='max-width: 700px; margin: auto; background-color: #2c3e50; padding: 30px; border-radius: 25px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);'>"
                     +
-                    "<h1 style='color: #4CAF50; text-align: center;'>Recuperar Senha!</h1>" +
-                    "<p style='font-size: 16px; line-height: 1.5;'>Olá,</p>" +
-                    "<p style='font-size: 16px; line-height: 1.5;'>Recebemos uma solicitação para recuperar a sua senha. Use o token abaixo para continuar o processo:</p>"
+                    "<h1 style='color: white; text-align: center;'>Recuperar Senha!</h1>" +
+                    "<p style='font-size: 16px; line-height: 1.5; color: white; text-align: center;'>Olá,</p>" +
+                    "<p style='font-size: 16px; line-height: 1.5; color: white; text-align: center;'>Recebemos uma solicitação para recuperar a sua senha. Use o token abaixo para continuar o processo:</p>"
                     +
-                    "<p style='font-size: 18px; color: #4CAF50; font-weight: bold; text-align: center;'>" + token
+                    "<p style='font-size: 18px; color: white; font-weight: bold; text-align: center;'>" + token
                     + "</p>" +
-                    "<p style='font-size: 16px; line-height: 1.5;'>Se você não solicitou a recuperação de senha, ignore este email. Sua conta está segura.</p>"
+                    "<p style='font-size: 16px; color: white; line-height: 1.5; text-align: center;'>Se você não solicitou a recuperação de senha, ignore este email. Sua conta está segura.</p>"
                     +
-                    "<p style='font-size: 16px; line-height: 1.5;'>Obrigado,</p>" +
-                    "<p style='font-size: 16px; line-height: 1.5;'>Equipe de Suporte</p>" +
+                    "<p style='font-size: 16px; color: white; line-height: 1.5; text-align: center;'>Obrigado,</p>" +
+                    "<p style='font-size: 16px; color: white; line-height: 1.5; text-align: center;'>Equipe de Suporte</p>" +
                     "</div>" +
                     "</body>" +
                     "</html>";
