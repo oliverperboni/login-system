@@ -81,7 +81,7 @@ export const recoverForgotPassword = async (email: string): Promise<string> => {
   }
 };
 
-export const validateToken = async (token: string, authToken: string): Promise<string> => {
+export const validateToken = async (token: string, authToken: string | null): Promise<string> => {
   const data = JSON.stringify({ token });
 
   const config = {
@@ -105,7 +105,7 @@ export const validateToken = async (token: string, authToken: string): Promise<s
 }
 
 
-export const restorePassword = async (user: string, newPassword: string, authToken: string): Promise<string> => {
+export const restorePassword = async (user: string, newPassword: string, authToken: string | null): Promise<string> => {
   const data = JSON.stringify({ user, newPassword });
 
   const config = {
