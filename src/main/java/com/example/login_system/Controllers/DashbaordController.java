@@ -23,7 +23,7 @@ public class DashbaordController {
         return dashboardService.getAllUser();
     }
 
-
+    // search by an user
     @GetMapping("/search")
     public List<UserJSONResquest>searchUsers(@RequestParam("q") String query) {
         return dashboardService.searchByNamePrefix(query);
