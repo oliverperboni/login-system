@@ -8,10 +8,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-      <Route path="/" element={<TestePage />}/>
-        {/* <Route path="/" element={<LoginPage />} />
+      {/* <Route path="/" element={<TestePage />}/> */}
+        <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/reset-password" element={<PasswordReset />} /> */}
+        <Route path="/reset-password" element={<PasswordReset />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,8 @@
 import React, { useState, FormEvent } from "react";
 import "../Style/RegisterComponent.css";
 import { Link } from "react-router-dom";
+import { registerUser } from "../API/utils";
+import { AuthenticationResponse } from "../Types/types";
 
 const RegisterComponent: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -8,6 +10,8 @@ const RegisterComponent: React.FC = () => {
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [registerResponse, setRegisterResponse] =
+  useState<AuthenticationResponse | undefined>(undefined);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -18,9 +22,17 @@ const RegisterComponent: React.FC = () => {
     }
 
     // Process the registration (e.g., API call)
-    console.log("Registering:", { email, username, password1 });
+    registerUserData()
   };
-
+  
+  function registerUserData() {
+    registerUser(
+      username,
+      password1,
+      email,
+      "USER"
+    ).then((res) => setRegisterResponse(res));
+  }
   return (
     <>
       <div className="container">
