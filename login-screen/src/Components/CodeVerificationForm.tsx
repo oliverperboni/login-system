@@ -11,16 +11,44 @@ const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({ email, onSu
   const codeInputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
   const handleCodeChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const value = e.target.value.replace(/\D/, '');
-    if (value.length > 1) return;
+    const value = e.target.value;
+    if (value.length > 1) return; // Impede que mais de um caractere seja digitado
 
     const newCode = [...code];
     newCode[index] = value;
     setCode(newCode);
 
+    // Se o valor foi preenchido, foca no próximo input
     if (value && index < codeInputsRef.current.length - 1) {
       codeInputsRef.current[index + 1]?.focus();
     }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    // Detecta o Backspace e se o campo está vazio
+    if (e.key === 'Backspace' && code[index] === '') {
+      if (index > 0) {
+        codeInputsRef.current[index - 1]?.focus();
+        const newCode = [...code];
+        newCode[index - 1] = '';
+        setCode(newCode);
+      }
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (paste.length === code.length) {
+      const newCode = paste.split('');
+      setCode(newCode);
+      newCode.forEach((char, index) => {
+        if (codeInputsRef.current[index]) {
+          codeInputsRef.current[index]!.value = char;
+        }
+      });
+      codeInputsRef.current[code.length - 1]?.focus();
+    }
+    e.preventDefault();
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -51,6 +79,8 @@ const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({ email, onSu
             maxLength={1}
             value={value}
             onChange={(e) => handleCodeChange(e, index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+            onPaste={handlePaste}
             ref={(el) => (codeInputsRef.current[index] = el)}
             required
           />

@@ -30,6 +30,7 @@ const PasswordReset: React.FC = () => {
   const handleCodeSubmit = async (submittedCode: string[]) => {
     // Simulate API call
     const isValid = await validateToken(submittedCode.join(''),localStorage.getItem("token"));
+    console.log(submittedCode.join(''))
     if (isValid) {
       setVerificationCode(submittedCode);
       setStep(3);
