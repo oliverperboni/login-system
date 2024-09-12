@@ -1,13 +1,30 @@
 import React, { useState, FormEvent } from "react";
 import "../Style/LoginComponent.css";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import { loginUser } from "../API/utils";
+import { AuthenticationResponse } from "../Types/types";
 
-const LoginComponent: React.FC = () => {
+const LoginComponent = () => {
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string | undefined>("");
+  const [_, setLoginResponse] =
+    useState<AuthenticationResponse | undefined>(undefined);
+  const navigate = useNavigate();
+  const loginUserData = async (email: string, password: string) => {
+    try {
+      const res = await loginUser(email, password, email, "ADMIN");
+      localStorage.setItem("token", res.access_token);
+      console.log(res);
+      navigate("/sucesess")
+    } catch (err: any) {
+      setError("Login failed. Please check your credentials.");
+      setPassword("");
+    }
+  };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     // Placeholder for login logic
@@ -16,8 +33,7 @@ const LoginComponent: React.FC = () => {
       return;
     }
 
-    // Process the login (e.g., API call)
-    console.log("Logging in with:", { email, password });
+    await loginUserData(email, password);
   };
 
   return (

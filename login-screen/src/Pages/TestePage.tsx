@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { loginUser, registerUser,recoverForgotPassword, validateToken, restorePassword } from "../API/utils";
 import { AuthenticationResponse } from "../Types/types";
+import "../Style/Teste.css";
 
 function TestePage() {
   const [registerResponse, setRegisterResponse] =
@@ -19,16 +20,16 @@ function TestePage() {
 
   function registerUserData() {
     registerUser(
-      "oliverperboni",
+      "oliverperboni@gmail.com",
       "password",
       "oliverperboni@gmail.com",
       "ADMIN"
     ).then((res) => setRegisterResponse(res));
   }
 
-  function loginUserData() {
+  function loginUserData(){
     loginUser(
-        "oliverperboni",
+        "oliverperboni@gmail.com",
         "password",
         "oliverperboni@gmail.com",
         "ADMIN"
@@ -53,7 +54,7 @@ function TestePage() {
   }
 
   return (
-    <>
+    <div>
       <button type="button" onClick={registerUserData}>Teste do Registro</button>
       <span>
         {registerResponse ? JSON.stringify(registerResponse) : "Nenhuma resposta ainda"}
@@ -79,7 +80,7 @@ function TestePage() {
       <span>
         {restorePasswordAns ? JSON.stringify(restorePasswordAns) : "Nenhuma resposta ainda"}
       </span>
-    </>
+    </div>
   );
 }
 

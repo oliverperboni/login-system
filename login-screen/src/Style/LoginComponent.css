@@ -2,7 +2,8 @@
   font-family: "Quicksand", sans-serif;
 }
 body {
-  height: 100vh;
+  /* height: 100vh; */
+  margin: 0;
   background: linear-gradient(135deg, #1f2a38 0%, #3c5061 100%);
 }
 
@@ -14,11 +15,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 10vh;
+  min-height: 1vh;
 }
 
 .loginBox {
-  margin-top: 25vh;
+  padding: 0;
+  /* margin-top: 25vh; */
   background:  #2c3e50;;
   position: relative;
   height: 450px;
@@ -30,7 +32,7 @@ body {
 .user-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: baseline;
 }
 
 .input-fields {
