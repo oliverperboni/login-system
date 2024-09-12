@@ -4,6 +4,7 @@ import EmailForm from '../Components/EmailForm';
 import CodeVerificationForm from '../Components/CodeVerificationForm';
 import NewPasswordForm from '../Components/NewPasswordForm';
 import SuccessMessage from '../Components/SuccessMessage';
+import { recoverForgotPassword, restorePassword, validateToken } from '../API/utils';
 
 const PasswordReset: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -12,9 +13,10 @@ const PasswordReset: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
 
   // Step 1: Handle email submission
+  // ja existe
   const handleEmailSubmit = async (submittedEmail: string) => {
     // Simulate API call
-    const isValid = await simulateEmailValidation(submittedEmail);
+    const isValid = await recoverForgotPassword(submittedEmail);
     if (isValid) {
       setEmail(submittedEmail);
       setStep(2);
@@ -24,9 +26,10 @@ const PasswordReset: React.FC = () => {
   };
 
   // Step 2: Handle code verification
+  //valida o token
   const handleCodeSubmit = async (submittedCode: string[]) => {
     // Simulate API call
-    const isValid = await simulateCodeValidation(submittedCode.join(''));
+    const isValid = await validateToken(submittedCode.join(''),localStorage.getItem("token"));
     if (isValid) {
       setVerificationCode(submittedCode);
       setStep(3);
@@ -38,7 +41,7 @@ const PasswordReset: React.FC = () => {
   // Step 3: Handle password reset
   const handlePasswordSubmit = async (submittedPassword: string) => {
     // Simulate API call
-    const isSuccess = await simulatePasswordReset(submittedPassword);
+    const isSuccess = await restorePassword(email,submittedPassword,localStorage.getItem("token"));
     if (isSuccess) {
       setNewPassword(submittedPassword);
       setStep(4);
@@ -59,7 +62,7 @@ const PasswordReset: React.FC = () => {
   );
 };
 
-// Simulated API calls
+
 const simulateEmailValidation = async (email: string): Promise<boolean> => {
   return new Promise((resolve) => setTimeout(() => resolve(email === 'user@example.com'), 1000));
 };

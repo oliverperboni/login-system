@@ -159,46 +159,45 @@ public class AuthenticationService {
 
     }
 
-    public ResponseEntity<String> updatePassword(String username, String newPassword) {
-        // Verifica se o usuário existe no banco de dados
-        User user = repository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-
-        // Codifica a nova senha e atualiza o campo de senha do usuário
-        user.setPassword(passwordEncoder.encode(newPassword));
-        repository.save(user);
-
-        // Invalida todos os tokens existentes para este usuário
-        revokeAllTokenByUser(user);
-
-        // Gera novos tokens (opcional, dependendo do caso de uso)
-        org.springframework.security.core.userdetails.User springUser = convertToSpringUser(user);
-        String accessToken = jwtService.generateAccessToken(springUser);
-        String refreshToken = jwtService.generateRefreshToken(springUser);
-        saveUserToken(accessToken, refreshToken, user);
-
-        return new ResponseEntity<>("Senha atualizada com sucesso", HttpStatus.OK);
+    public ResponseEntity<Boolean> updatePassword(String username, String newPassword) {
+        try {
+            // Verifica se o usuário existe no banco de dados
+            User user = repository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    
+            // Codifica a nova senha e atualiza o campo de senha do usuário
+            user.setPassword(passwordEncoder.encode(newPassword));
+            repository.save(user);
+    
+            // Invalida todos os tokens existentes para este usuário
+            revokeAllTokenByUser(user);
+    
+            // Gera novos tokens (opcional, dependendo do caso de uso)
+            org.springframework.security.core.userdetails.User springUser = convertToSpringUser(user);
+            String accessToken = jwtService.generateAccessToken(springUser);
+            String refreshToken = jwtService.generateRefreshToken(springUser);
+            saveUserToken(accessToken, refreshToken, user);
+    
+            return new ResponseEntity<>(true, HttpStatus.OK);  // Retorna true se a senha foi atualizada com sucesso
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);  // Retorna false se ocorrer algum erro
+        }
     }
+    
 
 
-    // TODO change this method: only confirms if the token is valid or not !!!
-    public ResponseEntity<String> resetPassword(String token) {
+    public ResponseEntity<Boolean> resetPassword(String token) {
         // Verifica se o token é válido
         RecoverToken recoverToken = recoverTokenService.getToken(token);
+        
+        // Verifica se o token é nulo ou expirou
         if (recoverToken == null || !LocalDateTime.now().isBefore(recoverToken.getExpires_at())) {
-            return new ResponseEntity<>("Invalid or expired token", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);  // Retorna false se o token for inválido ou expirado
         }
-
-        // RecoverToken validToken = tokenOptional.get();
-        // User user = recoverToken.getUser();
-
-        // // Atualiza a senha do usuário
-        // user.setPassword(passwordEncoder.encode(newPassword));
-        // repository.save(user);
-
-        // Revoga o token após a redefinição da senha
-
-        return new ResponseEntity<>("Token valid", HttpStatus.OK);
+    
+        // Revoga o token após a redefinição da senha (se necessário, essa lógica pode ser descomentada e ajustada conforme o caso)
+    
+        return new ResponseEntity<>(true, HttpStatus.OK);  // Retorna true se o token for válido
     }
+    
 }

@@ -40,27 +40,28 @@ public class RecoverTokenController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody EmailRequest emailRequest) {
+    public ResponseEntity<Boolean> forgotPassword(@RequestBody EmailRequest emailRequest) {
         String email = emailRequest.getEmail();
-
+    
         try {
             User user = userService.findUserByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-
-
+    
             String token = TokenGenerator.generateToken();
             RecoverToken recoverToken = new RecoverToken(user, token, LocalDateTime.now().plusMinutes(15));
             recoverTokenService.createToken(recoverToken);
+    
             EmailSender emailSender = new EmailSender();
             emailSender.sendEmail(email, token);
-            return ResponseEntity.ok("Password reset email sent successfully");
+            
+            return ResponseEntity.ok(true);  // Retorna true se o e-mail foi enviado com sucesso
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with email: " + email);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);  // Retorna false se o usuário não foi encontrado
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while processing your request");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);  // Retorna false se ocorrer outro erro
         }
     }
+    
 
     // find if exist one user with this email and then generate the token
 

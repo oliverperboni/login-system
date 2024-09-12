@@ -49,7 +49,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/restore-password")
-    public ResponseEntity<String> resetPass(@RequestBody ChangePasswordRequest req){
+    public ResponseEntity<Boolean> resetPass(@RequestBody ChangePasswordRequest req){
         String u = req.getUser();
         String newPass = req.getNewPassword();
 
