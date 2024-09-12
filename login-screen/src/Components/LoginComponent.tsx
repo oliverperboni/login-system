@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import "../Style/LoginComponent.css";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../API/utils";
 import { AuthenticationResponse } from "../Types/types";
 
@@ -11,7 +11,9 @@ const LoginComponent = () => {
   const [error, setError] = useState<string | undefined>("");
   const [_, setLoginResponse] =
     useState<AuthenticationResponse | undefined>(undefined);
+
   const navigate = useNavigate();
+
   const loginUserData = async (email: string, password: string) => {
     try {
       const res = await loginUser(email, password, email, "ADMIN");

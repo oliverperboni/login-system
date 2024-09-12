@@ -1,8 +1,8 @@
 import React, { useState, FormEvent } from "react";
 import "../Style/RegisterComponent.css";
-import { Link } from "react-router-dom";
 import { registerUser } from "../API/utils";
 import { AuthenticationResponse } from "../Types/types";
+import { useNavigate } from "react-router-dom";
 
 const RegisterComponent: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -10,8 +10,9 @@ const RegisterComponent: React.FC = () => {
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [registerResponse, setRegisterResponse] =
-  useState<AuthenticationResponse | undefined>(undefined);
+  const [_, setRegisterResponse] =
+    useState<AuthenticationResponse | undefined>(undefined);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -20,19 +21,19 @@ const RegisterComponent: React.FC = () => {
       setError("Passwords do not match");
       return;
     }
-
-    // Process the registration (e.g., API call)
     registerUserData()
   };
-  
-  function registerUserData() {
-    registerUser(
-      username,
-      password1,
-      email,
-      "USER"
-    ).then((res) => setRegisterResponse(res));
+
+  const registerUserData = async () => {
+    try {
+      const res = await registerUser(email,password1,email, "ADMIN")
+      setRegisterResponse(res)
+      navigate("/")
+    } catch (error :any) {
+      setError("error in the register")
+    }
   }
+  
   return (
     <>
       <div className="container">
